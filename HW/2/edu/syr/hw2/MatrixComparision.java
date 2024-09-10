@@ -1,3 +1,5 @@
+package edu.syr.hw2;
+
 class Matrix1D {
     private final int nDim1;
     private final int nDim2;
@@ -37,9 +39,9 @@ class Matrix1D {
         }
     }
 
-    public void set(int rowIndex, int colIndex, int value) {
+    public void set(int xIndex, int yIndex, int zIndex, int value) {
         try {
-            validateIndices(rowIndex, colIndex);
+            validateIndices(xIndex, yIndex, zIndex);
             matrix[xIndex * nDim2 * nDim3 + yIndex * nDim3 + zIndex] = value;
         } catch (IllegalArgumentException e) {
             System.err.println("Error in set() method: " + e.getMessage());
@@ -87,11 +89,120 @@ class Matrix3D {
     }
 
     public int get(int xIndex, int yIndex, int zIndex) {
-        validateIndices(xIndex, yIndex, zIndex);
-        return matrix[xIndex][yIndex][zIndex];
+        try{
+            validateIndices(xIndex, yIndex, zIndex);
+            return matrix[xIndex][yIndex][zIndex];
+        }
+        catch (IllegalArgumentException e) {
+            System.err.println("Error in get() method: " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
     }
 
-    public void set(int rowIndex, int colIndex, int value) {
+    public void set(int xIndex, int yIndex, int zIndex, int value) {
+        try{
+            validateIndices(xIndex, yIndex, zIndex);
+            matrix[xIndex][yIndex][zIndex] = value;
+        }
+        catch (IllegalArgumentException e) {
+            System.err.println("Error in set() method: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
+    public void getMatrix() {
+        for (int i = 0; i < nDim1; i++) {
+            for (int j = 0; j < nDim2; j++) {
+                for (int k = 0; k < nDim3; k++) {
+                    System.out.print(matrix[i][j][k] + " ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+}
+
+public class MatrixComparision {
+    public static void main(String[] args) {
+        Matrix1D m1 = new Matrix1D(3, 3, 3);
+        Matrix3D m2 = new Matrix3D(3, 3, 3);
+
+        // Measure the time to set in 1D matrix
+        long startTime = System.nanoTime();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    m1.set(i, j, k, i + j + k);
+                }
+            }
+        }
+        long endTime = System.nanoTime();
+
+        System.out.println("Time taken to set in 1D matrix: " + (endTime - startTime) + " ns");
+
+        long setTime1D = endTime - startTime;
+
+        // Measure the time to set in 3D matrix
+        startTime = System.nanoTime();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    m2.set(i, j, k, i + j + k);
+                }
+            }
+        }
+        endTime = System.nanoTime();
+
+        System.out.println("Time taken to set in 3D matrix: " + (endTime - startTime) + " ns");
+
+        long setTime3D = endTime - startTime;
+
+        // Measure the time to get in 1D matrix
+        startTime = System.nanoTime();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    m1.get(i, j, k);
+                }
+            }
+        }
+        endTime = System.nanoTime();
+
+        System.out.println("Time taken to get in 1D matrix: " + (endTime - startTime) + " ns");
+
+        long getTime1D = endTime - startTime;
+
+        // Measure the time to get in 3D matrix
+        startTime = System.nanoTime();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    m2.get(i, j, k);
+                }
+            }
+        }
+        endTime = System.nanoTime();
+
+        System.out.println("Time taken to get in 3D matrix: " + (endTime - startTime) + " ns");
+
+        long getTime3D = endTime - startTime;
+
+        // Compare the time taken to set and get in 1D and 3D matrix and say which is faster
+        if (setTime1D < setTime3D) {
+            System.out.println("Setting in 1D matrix is faster");
+        } else {
+            System.out.println("Setting in 3D matrix is faster");
+        }
+
+        if (getTime1D < getTime3D) {
+            System.out.println("Getting in 1D matrix is faster");
+        } else {
+            System.out.println("Getting in 3D matrix is faster");
+        }
+
+        // Result for conclusion - comparision & explanation & avg of 3 trials
     }
 }
