@@ -2,26 +2,29 @@ package edu.syr.hw2;
 
 import java.util.ArrayList;
 import java.util.List;
-import edu.syr.hw2.Book;
 
 public class Library {
     // Catalog variable is made private in order to restrict the users from deleting the titles from catalog
-    private ArrayList<Book> catalog = new ArrayList<Book>();
+    private List<Book> catalog = new ArrayList<>();
 
     public void add (Book bookObj) {
         this.catalog.add(bookObj);
     }
 
-    // No static keyword, as the catalog is an attibute of the Library object.
-    // Every Library object needs to search in it's own catalog.
-    public ArrayList<Book> search (Book b) {
+    // The search method is not static, as it needs to access the catalog attribute of the Library object.
+    // The search method is public, as it needs to be accessed by the users of the Library class.
+    // Returns an ArrayList of Book objects, as the search can return multiple books.
+    public List<Book> search (Book b) {
 
-        ArrayList<Book> result = new ArrayList<Book>();
+        // Initialize the result ArrayList
+        ArrayList<Book> result = new ArrayList<>();
+        
         // Loop through all titles in the catalog
         for (Book book : catalog) {
             // Exact match case
             if (book.equals(b)) {
                 result.add(0, book);
+//                System.out.println("equals\n");
             }
 
             // Partial match case
@@ -40,6 +43,9 @@ public class Library {
         lib.add(b1);
         lib.add(b2);
         lib.add(b3);
+        lib.add(new Book("Sri Ram", "My amazing life", "Syracuse Publications", "ISBNSYR1", 2024));
+        lib.add(new Book("Vennela", "Vennela's Life", "Syracuse Publications", "ISBNSYR2", 2023));
+
         Book b4 = new Book("Author2", "Title2", "Publisher1", "ISBN2", 2001); // equals case
         Book b5 = new Book("Author1", "", "", "", 0); // contains author case
         Book b6 = new Book("", "Title1", "", "", 0); // contains title case
@@ -50,26 +56,41 @@ public class Library {
         Book b11 = new Book("", "Title", "", "", 0); // title
         Book b12 = new Book("", "", "Publisher", "", 0); // publisher
         Book b13 = new Book("", "", "", "ISBN", 0);
+        Book b14 = new Book("Author1", "Title2", "", "", 0);
+        Book b15 = new Book("", "life", "", "", 0);
+        Book b16 = new Book("Vennela", "life", "", "", 0);
+        Book b17 = new Book("Sri Ram", "Vennela's life", "", "", 0);
+        Book b18 = new Book("", "Vennelas life", "", "", 0);
         
-        System.out.println(lib.search(b4));
+        System.out.println(lib.search(b4)); // [b2]
         System.out.println();
-        System.out.println(lib.search(b5));
+        System.out.println(lib.search(b5)); // [b1, b3]
         System.out.println();
-        System.out.println(lib.search(b6));
+        System.out.println(lib.search(b6)); // [b1]
         System.out.println();
-        System.out.println(lib.search(b7));
+        System.out.println(lib.search(b7)); // [b1, b2]
         System.out.println();
-        System.out.println(lib.search(b8));
+        System.out.println(lib.search(b8)); // [b1]
         System.out.println();
-        System.out.println(lib.search(b9));
+        System.out.println(lib.search(b9)); // [b1, b3]
         System.out.println();
-        System.out.println(lib.search(b10));
+        System.out.println(lib.search(b10)); // [b1, b2, b3]
         System.out.println();
-        System.out.println(lib.search(b11));
+        System.out.println(lib.search(b11)); // [b1, b2, b3]
         System.out.println();
-        System.out.println(lib.search(b12));
+        System.out.println(lib.search(b12)); // [b1, b2, b3]
         System.out.println();
-        System.out.println(lib.search(b13));
+        System.out.println(lib.search(b13)); // []
+        System.out.println();
+        System.out.println(lib.search(b14)); // []
+        System.out.println();
+        System.out.println(lib.search(b15)); // [Sri Ram & Vennela's books]
+        System.out.println();
+        System.out.println(lib.search(b16)); // [Vennela's life]
+        System.out.println();
+        System.out.println(lib.search(b17)); // []
+        System.out.println();
+        System.out.println(lib.search(b18)); // []
         System.out.println();
     }
 }
