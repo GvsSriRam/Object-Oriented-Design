@@ -1,7 +1,7 @@
 package edu.syr.hw3;
 
 public class Node<T> {
-    private Object value;
+    private T value;
     public Node<T> next;
 
     public Node (T i) {
@@ -9,14 +9,14 @@ public class Node<T> {
     }
 
     public static <T> Node<T> build(T[] data) {
-        Node<T> list = new Node<T>(data[0]);
+        Node<T> list = new Node<T>(null);
         Node<T> iter = list;
 
-        for (int i = 1; i < data.length; i++) {
+        for (int i = 0; i < data.length; i++) {
             iter.next = new Node<T>(data[i]);
             iter = iter.next;
         }
-        return list;
+        return list.next;
     }
 
     public static void main(String[] args) {
