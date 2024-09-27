@@ -85,15 +85,8 @@ public class Rational {
             return true;
         }
 
-        if (o==null || ! (o instanceof Rational) || ! (o instanceof Integer) || ! (o instanceof Float)) {
+        if (o==null || ! (o instanceof Rational) || ! (o instanceof Integer)) {
             return false;
-        }
-
-        if (o instanceof Float) {
-            float that = (Float) o;
-            float thisValue = (float) this.numer / this.denom;
-            float epsilon = 1e-6f; // Define an acceptable precision
-            return Math.abs(thisValue - that) < epsilon;
         }
 
         if (o instanceof Integer) {
