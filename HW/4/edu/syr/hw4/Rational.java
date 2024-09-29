@@ -12,16 +12,17 @@ public class Rational {
             throw new ArithmeticException("Denominator cannot be zero");
         }
         this.g = computeGCD(Math.abs(n), Math.abs(d));
-        n = (d < 0) ? -n : n;
+        n = (d < 0) ? -n : n; // Handles negative denominator cases
         d = Math.abs(d);
+        // Normalize the rational number
         this.numer = n / this.g;
         this.denom = d / this.g;
     }
 
     public Rational(int n) {/*implement this*/
         this.numer = n;
-        this.denom = 1;
-        this.g = 1;
+        this.denom = 1; // Setting denominator = 1
+        this.g = 1; // GCD will be 1, no further computation necessary for normalization
     }
 
     private static int computeGCD (int n, int d) {
@@ -34,17 +35,27 @@ public class Rational {
     public String toString() {/*implement this*/
         StringBuilder sb = new StringBuilder();
         sb.append(this.numer);
-        if (this.denom != 1) {
+        if (this.denom != 1) { // If denominator is 1, display it as integer value
             sb.append("/").append(this.denom);
         };
         return sb.toString();
     }
 
     public Rational add(Rational that) {/*implement this*/
+        if (this.numer == 0) {
+            return that;
+        } else if (that.numer == 0) {
+            return this;
+        }
         return new Rational(this.numer * that.denom + this.denom * that.numer, this.denom * that.denom);
     }
 
     public Rational add(int that) {/*implement this*/
+        if (this.numer == 0) {
+            return new Rational(that);
+        } else if (that == 0) {
+            return this;
+        }
         return new Rational(this.numer + that*this.denom, this.denom);
     }
 
@@ -56,42 +67,22 @@ public class Rational {
         return this.numer < that * this.denom;
     }
 
-//    @Override
-//    public boolean equals(Rational that) {
-//        if (this==that) {
-//            return true;
-//        }
-//        if (that==null || ! (that instanceof Rational)) {
-//            return false;
-//        }
-//        return this.numer == that.numer && this.denom == that.denom;
-//    }
-
-//    @Override
-//    public boolean equals(int that) {
-//        return this.numer == that * this.denom;
-//    }
-
-//    @Override
-//    public boolean equals(float that) {
-//        float thisValue = (float) this.numer / this.denom;
-//        float epsilon = 1e-6f;
-//        return Math.abs(thisValue - that) < epsilon;
-//    }
-
+    // Equals method to verify any rational or integer value is same as this rational
+    // We ignore GCD value for this
+    // Overriding this method is out of scope of this assignment
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
 
-        if (o==null || ! (o instanceof Rational) || ! (o instanceof Integer)) {
+        if (o==null) {
             return false;
         }
 
         if (o instanceof Integer) {
             int that = (Integer) o;
-            return this.numer == that * this.denom;
+            return this.numer == that && this.denom == 1;
         }
 
         if (o instanceof Rational) {
@@ -102,6 +93,7 @@ public class Rational {
         return false;
     }
 
+    // Overriding this method is out of scope of this assignment
     @Override
     public int hashCode() {
         int result = 17;
@@ -110,28 +102,36 @@ public class Rational {
         return result;
     }
 
-    public Rational max(Rational that) {/*implement this*/
-        if (this.equals(that)) {
-            return this;
-        }
-        else if (this.lessThan(that)) {
-            return that;
-        }
-        else {
-            return this;
-        }
+//    public Rational max(Rational that) {/*implement this*/
+//        if (this.equals(that)) {
+//            return this;
+//        }
+//        else if (this.lessThan(that)) {
+//            return that;
+//        }
+//        else {
+//            return this;
+//        }
+//    }
+//
+//    public Rational max(int that) {/*implement this*/
+//        if (this.equals(that)) {
+//            return this;
+//        }
+//        else if (this.lessThan(that)) {
+//            return new Rational(that, 1);
+//        }
+//        else {
+//            return this;
+//        }
+//    }
+
+    public Rational max(Rational that) {
+        return this.lessThan(that) ? that : this;
     }
 
-    public Rational max(int that) {/*implement this*/
-        if (this.equals(that)) {
-            return this;
-        }
-        else if (this.lessThan(that)) {
-            return new Rational(that, 1);
-        }
-        else {
-            return this;
-        }
+    public Rational max(int that) {
+        return this.lessThan(that) ? new Rational(that) : this;
     }
 
 //    public static void main(String[] args) {
@@ -255,6 +255,15 @@ public class Rational {
         Rational maxNegative = new Rational(-3, 5).max(new Rational(2, 5));
         System.out.println(maxNegative); // prints "2/5"
         assert maxNegative.equals(new Rational(2, 5)) : "Max of -3/5 and 2/5 should be 2/5";
+
+        // Test case 17: zero numerator equals another zero numerator
+        System.out.println("test case 17");
+        Rational zero1 = new Rational(0, 5);
+        Rational zero2 = new Rational(0, 7);
+        Rational zero3 = new Rational(0);
+        System.out.println(zero1.equals(zero2));
+        System.out.println(zero1.equals(zero3));
+        System.out.println(zero2.equals(0));
     }
 }
 
