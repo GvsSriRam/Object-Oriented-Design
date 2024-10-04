@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 
-public class ListStack<E> implements Stack<E> {
+// Wrapper class for Stack
+public class AdaptedStack<E> implements Stack<E> {
     private List<E> list;
 
-    public ListStack() {
+    // Constructor
+    public AdaptedStack() {
         list = new ArrayList<>();
     }
 
+    // Adapting methods from Stack interface
     @Override
     public void push(E e) {
         list.add(e);
@@ -19,18 +22,20 @@ public class ListStack<E> implements Stack<E> {
 
     @Override
     public E pop() {
+        // Check for null stack
         if (!list.isEmpty()) {
             return list.remove(list.size() - 1);
         }
-        throw new EmptyStackException("Stack is empty");
+        throw new EmptyStackException();
     }
 
     @Override
     public E peek() {
+        // Check for null stack
         if (!list.isEmpty()) {
             return list.get(list.size() - 1);
         }
-        throw new EmptyStackException("Stack is empty");
+        throw new EmptyStackException();
     }
 
     @Override
@@ -44,7 +49,7 @@ public class ListStack<E> implements Stack<E> {
     }
 
     public static void main(String[] args) {
-        ListStack<Integer> stack = new ListStack<>();
+        AdaptedStack<Integer> stack = new AdaptedStack<>();
         stack.push(1);
         stack.push(2);
         stack.push(3);
@@ -70,7 +75,7 @@ public class ListStack<E> implements Stack<E> {
             System.out.println(stack.pop()); //Throws EmptyStackException after popping all elements
         } catch (EmptyStackException e) {
             System.out.println("Empty stack");
-            System.out.println("Exception caught: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
